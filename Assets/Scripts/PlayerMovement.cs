@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float maximumSpeed;
     public float rotationSpeed;
     public float jumpSpeed;
+    [SerializeField]
+    private float jumpHorizontalSpeed;
     public float jumpButtonGracePeriod;
 
     [SerializeField]
@@ -17,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private float originalStepOffset;
     private float? lastGroundedTime; // float? means it's nullable
     private float? jumpButtonPressedTime;
+    private bool isJumping;
+    private bool isGrounded;
 
     void Start(){
         animator = GetComponent<Animator>();
@@ -37,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
 
         animator.SetFloat("Input Magnitude", inputMagnitude, 0.05f, Time.deltaTime);
 
-        float speed = inputMagnitude * maximumSpeed;
         movementDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * movementDirection;
         movementDirection.Normalize();
 
@@ -50,41 +52,69 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump")){
             jumpButtonPressedTime = Time.time;
         }
-    
+
+        // checks if the character controller has been grounded recently
         if (Time.time - lastGroundedTime <= jumpButtonGracePeriod){
             characterController.stepOffset = originalStepOffset;
             ySpeed = -0.5f;
+            animator.SetBool("IsGrounded", true);
+            isGrounded = true;
+            animator.SetBool("IsJumping", false);
+            isJumping = false;
+            animator.SetBool("IsFalling", false);
+
+            // checks if the jump button has been pressed recently
             if (Time.time - jumpButtonPressedTime <= jumpButtonGracePeriod){
                 ySpeed = jumpSpeed;
+                animator.SetBool("IsJumping", true);
+                isJumping = true;
                 jumpButtonPressedTime = null;
                 lastGroundedTime = null;
             }
         }
         else{
             characterController.stepOffset = 0;
-        }
+            animator.SetBool("IsGrounded", false);
+            isGrounded = false;
 
-        Vector3 velocity = movementDirection * inputMagnitude;
-        velocity.y = ySpeed;
-        characterController.Move(velocity * Time.deltaTime);
+            if ((isJumping && ySpeed < 0) || ySpeed < -2){
+                animator.SetBool("IsFalling", true);
+            }
+        }   
 
+        // check if character is moving
         if (movementDirection != Vector3.zero){
-            animator.SetBool("isMoving", true);
+            animator.SetBool("IsMoving", true);
             Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
         else{
-            animator.SetBool("isMoving", false);
+            animator.SetBool("IsMoving", false);
+        }
+
+        if (isGrounded == false){
+            Vector3 velocity = movementDirection * inputMagnitude * jumpHorizontalSpeed;
+            velocity.y = ySpeed;
+            characterController.Move(velocity * Time.deltaTime);
         }
     }
 
-    private void OnApplicationFocus(bool focus){
-        if(focus){
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        else{
-            Cursor.lockState = CursorLockMode.None;
+    // using root motion
+    private void OnAnimatorMove(){
+        if(isGrounded){
+            Vector3 velocity = animator.deltaPosition;
+            velocity.y =  ySpeed * Time.deltaTime;
+            characterController.Move(velocity);
         }
     }
+
+    // private void OnApplicationFocus(bool focus){
+    //     if(focus){
+    //         Cursor.lockState = CursorLockMode.Locked;
+    //     }
+    //     else{
+    //         Cursor.lockState = CursorLockMode.None;
+    //     }
+    // }
 }
