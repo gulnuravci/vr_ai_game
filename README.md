@@ -1,2 +1,2 @@
 # vr_ai_game
-A Unity Game that leverages OpenAI capabilities to create an NPC which interacts with the player and uses VR to immerse the player in cool scenery
+A Unity Game that leverages Hugging Face models to create aa virtual friend which interacts with the player and uses VR to immerse the player in cool scenery.
