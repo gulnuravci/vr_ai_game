@@ -1,0 +1,4 @@
+repository "vr_ai_game@gulnurzehra@cloud"
+  path "/"
+    br "/main"
+    co "/main"
