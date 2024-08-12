@@ -29,31 +29,47 @@ public class JolleenSemanticAnimations : MonoBehaviour
         toggleThinking.onValueChanged.AddListener(OnToggleThinkingValueChanged);
     }
 
-    // // ----Set the animator's bool parameter based on the toggle state----
+    // ----Set the animator's bool parameter based on the toggle state----
 
     void OnToggleHappyValueChanged(bool isOn){
-        animator.SetBool("IsHappy", isOn);
+        if (isOn) {
+            animator.SetTrigger("IsHappy");
+        }
     }
 
     void OnToggleSadValueChanged(bool isOn){
-        animator.SetBool("IsSad", isOn);
+        if (isOn) {
+            animator.SetTrigger("IsSad");
+        }
     }
     void OnToggleAngryValueChanged(bool isOn){
-        animator.SetBool("IsAngry", isOn);
+        if (isOn){
+            animator.SetTrigger("IsAngry");
+        }
     }
     void OnToggleGreetingValueChanged(bool isOn){
-        animator.SetBool("IsGreeting", isOn);
+        if (isOn){
+            animator.SetTrigger("IsGreeting");
+        }
     }
     void OnToggleProudValueChanged(bool isOn){
-        animator.SetBool("IsProud", isOn);
+        if (isOn){
+            animator.SetTrigger("IsProud");
+        }
     }
     void OnToggleTalkingValueChanged(bool isOn){
-        animator.SetBool("IsTalking", isOn);
+        if (isOn){
+            animator.SetTrigger("IsTalking");
+        }
     }
     void OnToggleDisapproveValueChanged(bool isOn){
-        animator.SetBool("IsDisapprove", isOn);
+        if (isOn){
+            animator.SetTrigger("IsDisapprove");
+        }
     }
     void OnToggleThinkingValueChanged(bool isOn){
-        animator.SetBool("IsThinking", isOn);
+        if (isOn){
+            animator.SetTrigger("IsThinking");
+        }
     }
 }
