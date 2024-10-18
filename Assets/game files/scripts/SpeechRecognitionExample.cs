@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+// using UnityEditor.Scripting.Python;
 
 namespace HuggingFace.API.Examples {
     public class SpeechRecognitionExample : MonoBehaviour {
@@ -73,6 +74,11 @@ namespace HuggingFace.API.Examples {
             SendRecording();
         }
 
+        // static void GetResponse()
+        // {
+        //     PythonRunner.RunFile($"{Application.dataPath}/game files/scripts/TestPythonScript.py");
+        // }
+
         private void SendRecording() {
             text.color = Color.yellow;
             text.text = "Sending...";
@@ -83,14 +89,16 @@ namespace HuggingFace.API.Examples {
                 startButton.interactable = true;
 
                 // Get response from Jolleen
-                HuggingFaceAPI.TextGeneration(response, jolleenResponse => {
-                    jolleenText.color = Color.white;
-                    jolleenText.text = jolleenResponse;
-                },
-                jolleenError => {
-                    jolleenText.color = Color.red;
-                    jolleenText.text = jolleenError;
-                });
+                // HuggingFaceAPI.TextGeneration(response, jolleenResponse => {
+                //     jolleenText.color = Color.white;
+                //     jolleenText.text = jolleenResponse;
+                // },
+                // jolleenError => {
+                //     jolleenText.color = Color.red;
+                //     jolleenText.text = jolleenError;
+                // });
+
+                // GetResponse();
 
             }, error => {
                 text.color = Color.red;

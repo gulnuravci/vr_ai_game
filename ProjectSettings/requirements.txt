@@ -1,0 +1,6 @@
+langchain
+python-dotenv
+langchain-huggingface
+langchain_community
+langchain_openai
+bs4
